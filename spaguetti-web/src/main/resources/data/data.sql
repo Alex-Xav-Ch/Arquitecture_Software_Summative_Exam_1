@@ -1,19 +1,19 @@
 -- LIBROS
 
-INSERT INTO libros (isbn, titulo, autor, cantidad_disponible)
-VALUES ('9780134685991', 'Effective Java', 'Joshua Bloch', 5);
+INSERT INTO libros (isbn, titulo, autor, cantidad_disponible, anio_publicacion)
+VALUES ('134685991', 'Effective Java', 'Joshua Bloch', 5, 2008);
 
-INSERT INTO libros (isbn, titulo, autor, cantidad_disponible)
-VALUES ('9781617294945', 'Spring in Action', 'Craig Walls', 3);
+INSERT INTO libros (isbn, titulo, autor, cantidad_disponible, anio_publicacion)
+VALUES ('161729494', 'Spring in Action', 'Craig Walls', 3, 2018);
 
-INSERT INTO libros (isbn, titulo, autor, cantidad_disponible)
-VALUES ('9781492072508', 'Designing Data Intensive Applications', 'Martin Kleppmann', 2);
+INSERT INTO libros (isbn, titulo, autor, cantidad_disponible, anio_publicacion)
+VALUES ('149207250', 'Designing Data-Intensive Applications', 'Martin Kleppmann', 2, 2017);
 
-INSERT INTO libros (isbn, titulo, autor, cantidad_disponible)
-VALUES ('9780132350884', 'Clean Code', 'Robert C. Martin', 4);
+INSERT INTO libros (isbn, titulo, autor, cantidad_disponible, anio_publicacion)
+VALUES ('013235088', 'Clean Code', 'Robert C. Martin', 4, 2008);
 
-INSERT INTO libros (isbn, titulo, autor, cantidad_disponible)
-VALUES ('9780201633610', 'Design Patterns', 'Erich Gamma', 1);
+INSERT INTO libros (isbn, titulo, autor, cantidad_disponible, anio_publicacion)
+VALUES ('020163361', 'Design Patterns', 'Erich Gamma', 1, 1994);
 
 -- USUARIOS
 
