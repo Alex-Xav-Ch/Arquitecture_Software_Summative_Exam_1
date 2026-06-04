@@ -109,6 +109,26 @@ public class BibliotecaController {
         return em.createQuery("FROM Usuario", Usuario.class).getResultList();
     }
 
+    @DeleteMapping("/usuarios/{id}")
+    @Transactional
+    public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
+
+        Long activos = em.createQuery(
+                "SELECT COUNT(p) FROM Prestamo p WHERE p.usuarioId = :id AND p.estado = 'ACTIVO'",
+                Long.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        if (activos > 0) {
+            return ResponseEntity.badRequest().body("Usuario tiene préstamos activos");
+        }
+
+        Usuario u = em.find(Usuario.class, id);
+        if (u != null) em.remove(u);
+
+        return ResponseEntity.ok("Usuario eliminado");
+    }
+
     /* ================PRÉSTAMOS================ */
 
     @PostMapping("/prestamos")
