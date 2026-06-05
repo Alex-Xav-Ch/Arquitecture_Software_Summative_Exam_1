@@ -8,6 +8,7 @@ import com.prueba.sumativa.ddd.loan.domain.valueObject.UsuarioId;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -56,4 +57,12 @@ public class PrestamoRepositoryAdapter implements PrestamoRepository {
                 EstadoPrestamo.ACTIVO
         );
     }
+
+    @Override
+        public List<Prestamo> findAll() {
+        return repository.findAll()
+                .stream()
+                .map(PrestamoPersistenceMapper::toDomain)
+                .toList();
+        }
 }

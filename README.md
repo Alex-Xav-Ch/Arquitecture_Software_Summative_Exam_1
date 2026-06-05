@@ -200,13 +200,69 @@ El proyecto implementa DDD táctico junto con Arquitectura Hexagonal.
 
 ---
 
-## 10. Bounded Contexts
+# 10. Diseño Estratégico
+
+## Dominio Principal
+
+### Gestión de Biblioteca
+
+**Propósito:**
+
+Administrar libros, usuarios y préstamos dentro de una biblioteca mediante la aplicación de reglas de negocio relacionadas con disponibilidad, préstamos y devoluciones.
+
+---
+
+## Subdominios
+
+| Subdominio           | Tipo       |
+| -------------------- | ---------- |
+| Catálogo de Libros   | Supporting |
+| Gestión de Usuarios  | Supporting |
+| Gestión de Préstamos | Core       |
+
+---
+
+### Catálogo de Libros
+
+**Responsable de:**
+
+- Registrar libros
+- Consultar libros
+- Actualizar libros
+- Eliminar libros
+- Controlar disponibilidad
+
+---
+
+### Gestión de Usuarios
+
+**Responsable de:**
+
+- Registrar usuarios
+- Consultar usuarios
+
+---
+
+### Gestión de Préstamos
+
+Subdominio principal donde se concentran las reglas más importantes del negocio.
+
+**Responsable de:**
+
+- Registrar préstamos
+- Registrar devoluciones
+- Validar reglas de negocio
+- Controlar préstamos activos
+
+---
+
+## Bounded Contexts
 
 ### CatalogContext
 
 Responsable de la gestión de libros.
 
-Casos de uso:
+**Casos de uso:**
 
 - RegistrarLibroUseCase
 - ConsultarLibrosUseCase
@@ -219,7 +275,7 @@ Casos de uso:
 
 Responsable de la gestión de usuarios.
 
-Casos de uso:
+**Casos de uso:**
 
 - RegistrarUsuarioUseCase
 - ConsultarUsuariosUseCase
@@ -230,16 +286,226 @@ Casos de uso:
 
 Responsable de la gestión de préstamos.
 
-Casos de uso:
+**Casos de uso:**
 
 - RegistrarPrestamoUseCase
 - RegistrarDevolucionUseCase
 
 ---
 
-## 11. Arquitectura Hexagonal
+## Context Map
 
-### Flujo general
+### Patrón utilizado: Partnership
+
+Todos los Bounded Contexts forman parte del mismo sistema y son desarrollados por el mismo equipo.
+
+**Características:**
+
+- Evolucionan juntos.
+- Comparten reglas de negocio.
+- No existen equipos independientes.
+- Mantienen dependencias controladas mediante puertos y adaptadores.
+
+```text
+CatalogContext
+       ▲
+       │
+       │
+       ▼
+LoanContext
+       ▲
+       │
+       ▼
+UserContext
+```
+
+El contexto de préstamos consume información proveniente de libros y usuarios para ejecutar sus reglas de negocio.
+
+---
+
+## Lenguaje Ubicuo
+
+| Término         | Significado                        |
+| --------------- | ---------------------------------- |
+| Libro           | Recurso bibliográfico disponible   |
+| Usuario         | Persona registrada                 |
+| Préstamo        | Entrega temporal de un libro       |
+| Devolución      | Retorno de un libro prestado       |
+| Disponibilidad  | Cantidad de ejemplares disponibles |
+| ISBN            | Identificador único del libro      |
+| Préstamo Activo | Préstamo pendiente de devolución   |
+
+---
+
+## Experto del Dominio
+
+### Bibliotecario
+
+Responsable de ejecutar los procesos de:
+
+- Registro de libros
+- Registro de usuarios
+- Registro de préstamos
+- Registro de devoluciones
+
+---
+
+# 11. Diseño Táctico DDD
+
+## CatalogContext
+
+### Aggregate Root
+
+- Libro
+
+### Entity
+
+- Libro
+
+### Value Objects
+
+- LibroId
+- ISBN
+- AnioPublicacion
+- CantidadDisponible
+
+### Invariantes
+
+- ISBN único.
+- Cantidad disponible mayor o igual a cero.
+
+### Repositorio
+
+- LibroRepository
+
+### Excepciones
+
+- LibroNoEncontradoException
+- ISBNDuplicadoException
+
+### Eventos de Dominio (Diseño)
+
+- LibroRegistrado
+- LibroActualizado
+- LibroEliminado
+
+---
+
+## UserContext
+
+### Aggregate Root
+
+- Usuario
+
+### Entity
+
+- Usuario
+
+### Value Objects
+
+- UsuarioId
+- Nombre
+- Correo
+
+### Invariantes
+
+- Correo único.
+- Nombre obligatorio.
+
+### Repositorio
+
+- UsuarioRepository
+
+### Excepciones
+
+- UsuarioNoEncontradoException
+- CorreoDuplicadoException
+
+### Eventos de Dominio (Diseño)
+
+- UsuarioRegistrado
+
+---
+
+## LoanContext
+
+### Aggregate Root
+
+- Prestamo
+
+### Entity
+
+- Prestamo
+
+### Atributos principales
+
+- PrestamoId id
+- UsuarioId usuarioId
+- LibroId libroId
+- FechaPrestamo fechaPrestamo
+- FechaDevolucion fechaDevolucion
+- EstadoPrestamo estado
+
+### Value Objects
+
+- PrestamoId
+- LibroId
+- UsuarioId
+- FechaPrestamo
+- FechaDevolucion
+
+### Enum
+
+#### EstadoPrestamo
+
+- ACTIVO
+- DEVUELTO
+
+### Invariantes
+
+- El libro debe tener disponibilidad.
+- Máximo tres préstamos activos por usuario.
+- Un préstamo no puede devolverse dos veces.
+
+### Domain Service
+
+#### PrestamoDomainService
+
+**Responsabilidades:**
+
+- Validar límite de préstamos activos.
+- Coordinar reglas que involucran múltiples agregados.
+
+### Factory
+
+#### PrestamoFactory
+
+**Responsabilidades:**
+
+- Crear préstamos válidos.
+- Inicializar estado ACTIVO.
+- Inicializar fecha de préstamo.
+
+### Repositorio
+
+- PrestamoRepository
+
+### Excepciones
+
+- LibroNoDisponibleException
+- LimitePrestamosExcedidoException
+- PrestamoNoEncontradoException
+
+### Eventos de Dominio (Diseño)
+
+- PrestamoRegistrado
+- PrestamoDevuelto
+
+---
+
+# 12. Arquitectura Hexagonal
+
+## Flujo General
 
 ```text
 Controller
@@ -255,13 +521,13 @@ Adapter
 Database
 ```
 
-### Componentes
+## Componentes
 
-#### Domain
+### Domain
 
 Contiene las reglas de negocio y el modelo del dominio.
 
-Ejemplos:
+**Ejemplos:**
 
 - Libro
 - Usuario
@@ -270,22 +536,30 @@ Ejemplos:
 - Domain Services
 - Excepciones de negocio
 
-#### Application
+---
+
+### Application
 
 Contiene los casos de uso del sistema.
 
-Ejemplos:
+**Ejemplos:**
 
 - RegistrarLibroService
+- ConsultarLibrosService
+- ActualizarLibroService
+- EliminarLibroService
 - RegistrarUsuarioService
+- ConsultarUsuariosService
 - RegistrarPrestamoService
 - RegistrarDevolucionService
 
-#### Ports
+---
+
+### Ports
 
 Definen contratos de comunicación.
 
-Ejemplos:
+**Ejemplos:**
 
 - LibroRepository
 - UsuarioRepository
@@ -293,11 +567,13 @@ Ejemplos:
 - CatalogPort
 - UserPort
 
-#### Adapters
+---
+
+### Adapters
 
 Implementan los puertos y conectan con tecnologías externas.
 
-Ejemplos:
+**Ejemplos:**
 
 - LibroRepositoryAdapter
 - UsuarioRepositoryAdapter
@@ -305,11 +581,13 @@ Ejemplos:
 - CatalogAdapter
 - UserAdapter
 
-#### Infrastructure
+---
+
+### Infrastructure
 
 Contiene componentes técnicos.
 
-Ejemplos:
+**Ejemplos:**
 
 - Controllers REST
 - Repositorios JPA
@@ -319,7 +597,7 @@ Ejemplos:
 
 ---
 
-## 12. Estructura del proyecto
+# 13. Estructura del Proyecto
 
 ```text
 src/main/java
@@ -339,12 +617,12 @@ src/main/java
     │   ├── domain
     │   └── infrastructure
     │
-    └── BibliotecaApplication
+    └── DddApplication
 ```
 
 ---
 
-## 13. Beneficios de DDD y Arquitectura Hexagonal
+# 14. Beneficios de DDD y Arquitectura Hexagonal
 
 - Mayor separación de responsabilidades.
 - Dominio independiente de frameworks.
@@ -356,7 +634,7 @@ src/main/java
 
 ---
 
-## 14. Ejecución del proyecto
+# 15. Ejecución del Proyecto
 
 Compilar el proyecto:
 

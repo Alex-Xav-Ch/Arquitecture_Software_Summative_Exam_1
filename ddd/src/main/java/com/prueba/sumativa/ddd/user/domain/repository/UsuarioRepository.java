@@ -3,7 +3,7 @@ package com.prueba.sumativa.ddd.user.domain.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.prueba.sumativa.ddd.loan.domain.valueObject.UsuarioId;
+import com.prueba.sumativa.ddd.user.domain.model.UsuarioId;
 import com.prueba.sumativa.ddd.user.domain.model.Usuario;
 import com.prueba.sumativa.ddd.user.domain.valueObject.Correo;
 

@@ -35,7 +35,7 @@ INSERT INTO usuarios (nombre, correo)
 VALUES ('Luis Gomez', 'luis@correo.com');
 
 -- PRESTAMOS
-/*
+
 INSERT INTO prestamos (
     usuario_id,
     libro_id,
@@ -79,4 +79,4 @@ VALUES (
     CURRENT_DATE,
     DATEADD('DAY', 7, CURRENT_DATE),
     'DEVUELTO'
-); */
+); 

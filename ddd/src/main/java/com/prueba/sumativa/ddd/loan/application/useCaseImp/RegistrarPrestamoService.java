@@ -64,7 +64,9 @@ public class RegistrarPrestamoService implements RegistrarPrestamoUseCase {
                 prestamo.getLibroId().value(),
                 prestamo.getUsuarioId().value(),
                 prestamo.getFechaPrestamo().value(),
-                prestamo.getFechaDevolucion().value(),
+                prestamo.getFechaDevolucion() != null
+                        ? prestamo.getFechaDevolucion().value()
+                        : null,
                 prestamo.getEstado()
         );
     }

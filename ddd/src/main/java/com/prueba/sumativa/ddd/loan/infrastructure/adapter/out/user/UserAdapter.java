@@ -1,7 +1,7 @@
 package com.prueba.sumativa.ddd.loan.infrastructure.adapter.out.user;
 
 import com.prueba.sumativa.ddd.loan.application.port.out.UserPort;
-import com.prueba.sumativa.ddd.loan.domain.valueObject.UsuarioId;
+import com.prueba.sumativa.ddd.user.domain.model.UsuarioId;
 import com.prueba.sumativa.ddd.user.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Component;
 
