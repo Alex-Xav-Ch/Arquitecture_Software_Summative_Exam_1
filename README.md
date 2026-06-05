@@ -339,7 +339,7 @@ src/main/java
     │   ├── domain
     │   └── infrastructure
     │
-    └── BibliotecaApplication
+    └── DddApplication
 ```
 
 ---
