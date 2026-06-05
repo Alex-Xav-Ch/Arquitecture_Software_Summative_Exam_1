@@ -14,15 +14,12 @@ public class ActualizarLibroService implements ActualizarLibroUseCase {
 
     private final LibroRepository libroRepository;
 
-    public ActualizarLibroService(
-            LibroRepository libroRepository) {
-
+    public ActualizarLibroService(LibroRepository libroRepository) {
         this.libroRepository = libroRepository;
     }
 
     @Override
     public LibroResponse execute(ActualizarLibroCommand command) {
-
         Libro libro = libroRepository.findById(new LibroId(command.id()))
                 .orElseThrow(() -> new LibroNoEncontradoException(command.id()));
 
@@ -39,7 +36,6 @@ public class ActualizarLibroService implements ActualizarLibroUseCase {
     }
 
     private LibroResponse map(Libro libro) {
-
         return new LibroResponse(
                 libro.getId().value(),
                 libro.getIsbn().value(),

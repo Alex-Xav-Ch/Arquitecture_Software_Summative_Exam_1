@@ -18,7 +18,7 @@ INSERT INTO libros (isbn, titulo, autor, cantidad_disponible, anio_publicacion)
 VALUES ('020163361', 'Design Patterns', 'Erich Gamma', 1, 1994);
 
 -- USUARIOS
-/*
+
 INSERT INTO usuarios (nombre, correo)
 VALUES ('Juan Perez', 'juan@correo.com');
 
@@ -35,7 +35,7 @@ INSERT INTO usuarios (nombre, correo)
 VALUES ('Luis Gomez', 'luis@correo.com');
 
 -- PRESTAMOS
-
+/*
 INSERT INTO prestamos (
     usuario_id,
     libro_id,
